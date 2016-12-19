@@ -24,7 +24,8 @@ class HabrSpider(scrapy.Spider):
                 self.parse)
 
     def parse(self, response):
-        namelist = response.xpath("//a[@class='post-author__link']//text()").extract()
+        namelist = filter(bool, [x.strip(' ').strip('\n') for x in
+                                 response.xpath("//a[@class='post-author__link']//text()").extract()])
         titlelist = response.xpath(
             "//a[@class='post__title_link']//text() | //a[@class='post__title_link']//em//text()").extract()
         # titlelist = response.xpath("//li//a[@class='post-author__link']/@href").extract()
