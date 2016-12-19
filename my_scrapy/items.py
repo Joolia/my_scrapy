@@ -10,4 +10,4 @@ from scrapy.item import Item, Field
 
 class MyScrapyItem(Item):
     name = Field()  # author's name
-    title = Field()  # link to author
+    arlink = Field()  # link to aticle written by autor

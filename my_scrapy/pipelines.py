@@ -33,7 +33,7 @@ class MyScrapyPipeline(object):
 
     def createHabrTable(self):
         self.cursor.execute(
-            '''CREATE TABLE IF NOT EXISTS authors (id INTEGER PRIMARY KEY NOT NULL, name TEXT, title TEXT)''')
+            '''CREATE TABLE IF NOT EXISTS authors (id INTEGER PRIMARY KEY NOT NULL, name TEXT, arlink TEXT)''')
 
     def process_item(self, item, spider):
         self.storeInDb(item)
@@ -42,9 +42,9 @@ class MyScrapyPipeline(object):
     def storeInDb(self, item):
         print item['name']
 
-        self.cursor.execute("INSERT INTO authors(name, title) VALUES (?,?)",
+        self.cursor.execute("INSERT INTO authors(name, arlink) VALUES (?,?)",
                             (item['name'],
-                             item['title']))
+                             item['arlink']))
         print ("==============")
         print ("data stored")
         print ("==============")

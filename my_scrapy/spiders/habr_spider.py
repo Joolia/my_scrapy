@@ -18,17 +18,19 @@ class HabrSpider(scrapy.Spider):
     def start_requests(self):
         yield scrapy.Request("https://habrahabr.ru/search/page1/?q=python&target_type=posts&flow=&order_by=relevance")
 
-        for i in range(1, 2):
+        for i in range(1, 101):
             yield scrapy.Request(
                 "https://habrahabr.ru/search/page" + str(i) + "/?q=python&target_type=posts&flow=&order_by=relevance",
                 self.parse)
 
     def parse(self, response):
+        # authors list
         namelist = filter(bool, [x.strip(' ').strip('\n') for x in
                                  response.xpath("//a[@class='post-author__link']//text()").extract()])
-        titlelist = response.xpath(
-            "//a[@class='post__title_link']//text() | //a[@class='post__title_link']//em//text()").extract()
-        # titlelist = response.xpath("//li//a[@class='post-author__link']/@href").extract()
+
+        # titles list
+        linklist = response.xpath(
+            "//a[@class='post__title_link']//@href").extract()
 
         # namelist = response.css('').extract
 
@@ -37,5 +39,5 @@ class HabrSpider(scrapy.Spider):
         for i in range(0, lenlist):
             item = MyScrapyItem()
             item['name'] = namelist[i]
-            item['title'] = titlelist[i]
+            item['arlink'] = linklist[i]
             yield item
