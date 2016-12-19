@@ -16,18 +16,17 @@ class HabrSpider(scrapy.Spider):
     start_urls = ["https://habrahabr.ru/search/page1/?q=python&target_type=posts&flow=&order_by=relevance"]
 
     def start_requests(self):
-        # yield scrapy.Request("https://habrahabr.ru/search/page1/?q=python&target_type=posts&flow=&order_by=relevance")
+        yield scrapy.Request("https://habrahabr.ru/search/page1/?q=python&target_type=posts&flow=&order_by=relevance")
 
-        for i in range(1, 30):
+        for i in range(1, 2):
             yield scrapy.Request(
                 "https://habrahabr.ru/search/page" + str(i) + "/?q=python&target_type=posts&flow=&order_by=relevance",
                 self.parse)
 
     def parse(self, response):
-        namelist = response.xpath(
-            "//a[@class='post-author__link']//text()").extract()
+        namelist = response.xpath("//a[@class='post-author__link']//text()").extract()
         titlelist = response.xpath(
-            "concat(//a[@class='post__title_link']//text(), //a[@class='post__title_link']//em/text())").extract()
+            "//a[@class='post__title_link']//text() | //a[@class='post__title_link']//em//text()").extract()
         # titlelist = response.xpath("//li//a[@class='post-author__link']/@href").extract()
 
         # namelist = response.css('').extract
@@ -36,6 +35,6 @@ class HabrSpider(scrapy.Spider):
 
         for i in range(0, lenlist):
             item = MyScrapyItem()
-            item['name'] = namelist[i].strip()
+            item['name'] = namelist[i]
             item['title'] = titlelist[i]
             yield item

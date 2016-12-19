@@ -43,7 +43,7 @@ class MyScrapyPipeline(object):
         print item['name']
 
         self.cursor.execute("INSERT INTO authors(name, title) VALUES (?,?)",
-                            (item['name'].decode('utf-8'),
+                            (item['name'],
                              item['title']))
         print ("==============")
         print ("data stored")
